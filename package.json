@@ -1,0 +1,11 @@
+{
+  "name": "puppeteer-testing",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "puppeteer": "^9.1.1"
+  }
+}
