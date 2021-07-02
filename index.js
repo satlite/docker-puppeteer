@@ -2,7 +2,15 @@ const puppeteer = require('puppeteer')
 function run(item) {
   return new Promise(async (resolve, reject) => {
     try {
-      const browser = await puppeteer.launch({ headless: false, args: ['--incognito'] })
+      const browser = await puppeteer.launch({ headless: true, args: [
+        // Required for Docker version of Puppeteer
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        // This will write shared memory files into /tmp instead of /dev/shm,
+        // because Docker’s default for /dev/shm is 64MB
+        '--disable-dev-shm-usage',
+        '--incognito'
+      ] })
       const page = await browser.newPage()
       await page.setViewport({
         width: item.viewport.width,
@@ -11,7 +19,6 @@ function run(item) {
       await page.goto('https://globo.com')
       await new Promise((resolve, reject) => setTimeout(resolve, 2000))
       const indiceClick = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-      document.querySelector('body').innerHTML = Math.floor(Math.random() * 8)
       await new Promise((resolve, reject) => setTimeout(resolve, 2000))
       browser.close()
       return resolve('done')
